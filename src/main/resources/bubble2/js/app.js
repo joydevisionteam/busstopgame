@@ -46,8 +46,8 @@ var POP = {
     ios:  null,
 	COMPLEXITY_MIN: 0,
 	COMPLEXITY_MAX: 100,
-	COMPLEXITY_STEP: 5,
-	complexity: 70,
+	COMPLEXITY_STEP: 10,
+	complexity: 0,
 	// complexity of the gameplay. (1..100)
 	bubblesThrown: 0,
 	bubblesCaught: 0,
@@ -207,7 +207,6 @@ var POP = {
         // if the user has tapped the screen
         var touches = [];
         if (POP.Input.tapped) {
-            POP.caughtTime = currentTime;
             while (POP.Input.touches.length > 0) {
                 var touch = POP.Input.touches.shift();
                 touches.push(touch);
@@ -290,7 +289,7 @@ var POP = {
 
         POP.Draw.rect(0, 0, POP.WIDTH, POP.HEIGHT, '#036');
         POP.Draw.text('BUBBLES: ' + POP.bubblesCaught + ' / ' + POP.bubblesThrown, 20, 40, 40, '#fff');
-        POP.Draw.text('DIFFICULTY: ' + Math.round(POP.complexity/POP.COMPLEXITY_MAX) , POP.WIDTH * 0.6, 40, 40, '#fff');
+        POP.Draw.text('DIFFICULTY: ' + Math.round(POP.complexity/POP.COMPLEXITY_MAX*10) , POP.WIDTH * 0.6, 40, 40, '#fff');
 
 
         // display snazzy wave effect
