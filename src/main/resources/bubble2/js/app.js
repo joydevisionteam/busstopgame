@@ -261,15 +261,15 @@ var POP = {
         POP.Draw.rect(0, 0, POP.WIDTH, POP.HEIGHT, '#036');
 
         // display snazzy wave effect
-        for (i = 0; i < POP.wave.total; i++) {
-
-            POP.Draw.circle(
-                        POP.wave.x + POP.wave.offset +  (i * POP.wave.r),
-                        POP.wave.y,
-                        POP.wave.r,
-                        '#fff');
-        }
-
+//        for (i = 0; i < POP.wave.total; i++) {
+//
+//            POP.Draw.circle(
+//                        POP.wave.x + POP.wave.offset +  (i * POP.wave.r),
+//                        POP.wave.y,
+//                        POP.wave.r,
+//                       '#fff');
+//        }
+//
             // cycle through all entities and render to canvas
             for (i = 0; i < POP.entities.length; i += 1) {
                 POP.entities[i].render();
