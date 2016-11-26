@@ -221,8 +221,14 @@ var POP = {
             POP.entities[i].update();
 
             if (POP.entities[i].type === 'bubble' && checkCollision) {
-                hit = POP.collides(POP.entities[i],
-                                    {x: POP.Input.x, y: POP.Input.y, r: 7});
+                hit = false;
+                for (var i = 0; i < POP.Input.touches.length; i++) {
+                    var touch = POP.Input.touches[i];
+                    if (POP.collides(POP.entities[i], {x: touch.x, y: touch.y, r: 7})) {
+                        hit = true;
+                        break;
+                    }
+                }
                 if (hit) {
                     // spawn an exposion
 		         	POP.bubblesCaught += 1;
