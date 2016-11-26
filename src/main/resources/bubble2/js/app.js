@@ -199,18 +199,20 @@ var POP = {
 
         // spawn a new instance of Touch
         // if the user has tapped the screen
+        var touches = [];
         if (POP.Input.tapped) {
             while (POP.Input.touches.length > 0) {
                 var touch = POP.Input.touches.shift();
+                touches.push(touch);
                 // keep track of taps; needed to
                 // calculate accuracy
                 POP.score.taps += 1;
                 // add a new touch
                 POP.entities.push(new POP.Touch(touch.x, touch.y));
-                // set tapped back to false
-                // to avoid spawning a new touch
-                // in the next cycle
             }
+            // set tapped back to false
+            // to avoid spawning a new touch
+            // in the next cycle
             POP.Input.tapped = false;
 
             checkCollision = true;
@@ -222,8 +224,8 @@ var POP = {
 
             if (POP.entities[i].type === 'bubble' && checkCollision) {
                 hit = false;
-                for (var iTouch = 0; iTouch < POP.Input.touches.length; iTouch++) {
-                    var touch = POP.Input.touches[iTouch];
+                for (var iTouch = 0; iTouch < touches.length; iTouch++) {
+                    var touch = touches[iTouch];
                     if (POP.collides(POP.entities[i], {x: touch.x, y: touch.y, r: 7})) {
                         hit = true;
                         break;
