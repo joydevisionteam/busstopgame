@@ -171,7 +171,8 @@ var POP = {
             // put a new instance of bubble into our entities array
             POP.entities.push(new POP.Bubble());
             // reset the counter with a random value
-            POP.nextBubble = (COMPLEXITY_MAX*COMPLEXITY_MAX - complexity*complexity) / 50;
+//            POP.nextBubble = (COMPLEXITY_MAX*COMPLEXITY_MAX - complexity*complexity) / 50;
+            POP.nextBubble = 1;
         }
 
         // spawn a new instance of Touch
