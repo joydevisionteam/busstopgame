@@ -187,7 +187,7 @@ var POP = {
                                 // if the user tapped on this game tick
 
 		currentTime = new Date().getTime();
-		if ((currentTime - POP.caughtTime) > 15000) {
+		if ((currentTime - POP.caughtTime) > 5000) {
             clearSlates();
 		}
 
