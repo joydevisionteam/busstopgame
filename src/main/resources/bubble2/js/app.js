@@ -16,8 +16,8 @@ window.requestAnimFrame = (function(){
 var POP = {
 
     // set up some inital values
-    WIDTH: 1600,
-    HEIGHT:  900,
+    WIDTH: 900,
+    HEIGHT:  1600,
     scale:  1,
     // the position of the canvas
     // in relation to the screen
@@ -53,6 +53,7 @@ var POP = {
 	bubblesCaught: 0,
 	caughtTime: 0,
 	// percentage of caught bubbles (1..100)
+	
 
     init: function() {
 
@@ -119,6 +120,9 @@ var POP = {
             // as above
             e.preventDefault();
         }, false);
+
+		POP.img = new Image("https://dl.dropboxusercontent.com/u/139992952/stackoverflow/sky-bg2.jpg");
+	//	img.src: "https://dl.dropboxusercontent.com/u/139992952/stackoverflow/sky-bg2.jpg";
 
         // we're ready to resize
         POP.resize();
@@ -351,7 +355,10 @@ POP.Draw = {
         POP.ctx.beginPath();
         POP.ctx.arc(x + 5, y + 5, r, 0,  Math.PI * 2, true);
         POP.ctx.closePath();
+//		POP.ctx.clip();
+//    	POP.ctx.drawImage(POP.img, x - r, y - r, x + r, y + r);
         POP.ctx.fill();
+//		POP.ctx.restore();
     },
 
 
