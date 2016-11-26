@@ -177,7 +177,7 @@ var POP = {
             POP.bubblesThrown = 0;
             POP.bubblesCaught = 0;
             POP.caughtTime = currentTime;
-            POP.entities = [];
+        //    POP.entities = [];  // wrong behaviour - it breaks up bubbles flow, clears all bubbles from screen
             logoStraight_index = 0;
             logoStraight_count = 0;
             logoStraights = 0;
@@ -304,18 +304,12 @@ var POP = {
             // display scores
             POP.Draw.text('BUBBLES: ' + POP.bubblesCaught + ' / ' + POP.bubblesThrown, 20, 40, 40, '#fff');
             POP.Draw.text('LOGO STRAIGHTS: ' + logoStraights, 20, 80, 40, '#fff');
-            POP.Draw.text('DIFFICULTY: ' + Math.round(POP.complexity/POP.COMPLEXITY_MAX) , POP.WIDTH * 0.6, 40, 40, '#fff');
+            POP.Draw.text('DIFFICULTY: ' + Math.round(POP.complexity/POP.COMPLEXITY_MAX*10) , POP.WIDTH * 0.6, 40, 40, '#fff');
         }
 
         var i;
 
         POP.Draw.rect(0, 0, POP.WIDTH, POP.HEIGHT, '#036');
-<<<<<<< HEAD
-        POP.Draw.text('BUBBLES: ' + POP.bubblesCaught + ' / ' + POP.bubblesThrown, 20, 40, 40, '#fff');
-        POP.Draw.text('DIFFICULTY: ' + Math.round(POP.complexity/POP.COMPLEXITY_MAX*10) , POP.WIDTH * 0.6, 40, 40, '#fff');
-=======
-        renderStats();
->>>>>>> ef87a9237f525b51be4db0028b708802f2be6804
 
 
         // display snazzy wave effect
@@ -332,6 +326,7 @@ var POP = {
         for (i = POP.entities.length-1; i >= 0; i-- ) {
             POP.entities[i].render();
         }
+
         renderStats();
 
 		if (POP.isIdle) {
