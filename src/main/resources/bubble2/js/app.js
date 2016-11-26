@@ -48,7 +48,7 @@ var POP = {
 	COMPLEXITY_MAX: 100,
 	complexity: 70,
 	// complexity of the gameplay. (1..100)
-	bubblesTrown: 0,
+	bubblesThrown: 0,
 	bubblesCaught: 0,
 	caughtTime: 0,
 	// percentage of caught bubbles (1..100)
@@ -196,7 +196,7 @@ var POP = {
             // keep track of taps; needed to
             // calculate accuracy
             POP.score.taps += 1;
-            // add a new touch
+		    // add a new touch
             POP.entities.push(new POP.Touch(POP.Input.x, POP.Input.y));
             // set tapped back to false
             // to avoid spawning a new touch
@@ -214,6 +214,7 @@ var POP = {
                                     {x: POP.Input.x, y: POP.Input.y, r: 7});
                 if (hit) {
                     // spawn an exposion
+		         	POP.bubblesCaught += 1;
                     for (var n = 0; n < 5; n +=1 ) {
                         POP.entities.push(new POP.Particle(
                             POP.entities[i].x,
@@ -274,8 +275,8 @@ var POP = {
         }
 
         // display scores
-        POP.Draw.text('Hit: ' + POP.score.hit, 20, 30, 14, '#fff');
-        POP.Draw.text('Escaped: ' + POP.score.escaped, 20, 50, 14, '#fff');
+        POP.Draw.text('thrown: ' + POP.bubblesThrown, 20, 30, 14, '#fff');
+        POP.Draw.text('popped: ' + POP.bubblesCaught, 20, 50, 14, '#fff');
         POP.Draw.text('Complexity: ' + POP.complexity + '%', 20, 70, 14, '#fff');
 
     },
@@ -295,17 +296,16 @@ var POP = {
 
 
 	setComplexity: function() {
-		if (POP.bubblesThrown / POP.bubblesCaught > 0.5) {
-			if (POP.complexity < POP.COMPLEXITY_MAX) {			
-				POP.complexity += 1;
-			} 
-		} else {
+		if (POP.bubblesCaught / POP.bubblesThrown < 0.5) {
 			if (POP.complexity > POP.COMPLEXITY_MIN) {			
 				POP.complexity -= 1;
 			} 
+		} else {
+			if (POP.complexity < POP.COMPLEXITY_MAX) {			
+				POP.complexity += 1;
+			} 
 		}		
 	}
-
 
 };
 
@@ -394,6 +394,8 @@ POP.Touch = function(x, y) {
     this.render = function() {
         POP.Draw.circle(this.x, this.y, this.r, 'rgba(255,0,0,'+this.opacity+')');
     };
+
+
 
 };
 
