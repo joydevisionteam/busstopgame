@@ -364,7 +364,7 @@ POP.Draw = {
         POP.ctx.fillRect(x, y, w, h);
     },
 
-    circle: function(x, y, r, col) {
+    circle: function(x, y, r, col, logo) {
         POP.ctx.fillStyle = col;
         POP.ctx.beginPath();
         POP.ctx.arc(x + 5, y + 5, r, 0,  Math.PI * 2, true);
@@ -372,6 +372,39 @@ POP.Draw = {
 //		POP.ctx.clip();
 //    	POP.ctx.drawImage(POP.img, x - r, y - r, x + r, y + r);
         POP.ctx.fill();
+        if (logo){
+            var image = new Image();
+            if (logo==1) {
+                image.src = 'img/dr-oetker3.png';
+            }
+            if (logo==2) {
+                image.src = 'img/santa_claus_rovaniemi-b2.png';
+            }
+            if (logo==3) {
+                image.src = 'img/JCDecaux.png';
+            }
+            if (logo==4) {
+                image.src = 'img/santaclausland_Log_1102_5.png';
+            }
+            if (logo==5) {
+                image.src = 'img/santaclauslive_logo.png';
+            }
+            if (logo==6) {
+                image.src = 'img/twitter circle.png';
+            }
+            if (logo==7) {
+                image.src = 'img/upm.png';
+            }
+            if (logo==8) {
+                image.src = 'img/yousician.png';
+            }
+            if (logo==9) {
+                image.src = 'img/JCDecaux.png';
+            }
+            if (logo==10) {
+                image.src = 'img/JCDecaux.png';
+            }}
+        POP.ctx.drawImage(image, x+5-r, y+5-r, r*2, r*2);
 //		POP.ctx.restore();
     },
 
@@ -446,6 +479,8 @@ POP.Bubble = function() {
     this.x = (Math.random() * (POP.WIDTH) - this.r);
     this.y = POP.HEIGHT + (Math.random() * 100) + 100;
 
+    this.logo = Math.floor( Math.random() * ( 1 + 10 - 1 ) ) + 1;
+
     // the amount by which the bubble
     // will move from side to side
     this.waveSize = 5 + this.r;
@@ -475,7 +510,7 @@ POP.Bubble = function() {
 
     this.render = function() {
 
-        POP.Draw.circle(this.x, this.y, this.r, 'rgba(255,255,255,1)');
+        POP.Draw.circle(this.x, this.y, this.r, 'rgba(255,255,255,1)', this.logo);
     };
 
 };
