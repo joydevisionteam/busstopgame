@@ -172,20 +172,26 @@ var POP = {
     // this is where all entities will be moved
     // and checked for collisions etc
     update: function() {
+        function clearSlates() {
+            POP.setComplexity();
+            POP.bubblesThrown = 0;
+            POP.bubblesCaught = 0;
+            POP.caughtTime = currentTime;
+            POP.entities = [];
+            logoStraight_index = 0;
+            logoStraight_count = 0;
+            logoStraights = 0;
+        }
         var i,
             checkCollision = false; // we only need to check for a collision
                                 // if the user tapped on this game tick
 
 		currentTime = new Date().getTime();
-		if ((currentTime - POP.caughtTime) > 5000) {
-			POP.setComplexity();
-			POP.bubblesThrown = 0;
-			POP.bubblesCaught = 0;
-			POP.caughtTime = currentTime;
-    //        POP.entities = [];
+		if ((currentTime - POP.caughtTime) > 15000) {
+            clearSlates();
 		}
 
-		if ((currentTime - POP.lastTouchTime) > 15000) {
+        if ((currentTime - POP.lastTouchTime) > 15000) {
 			POP.isIdle = true;
 		}
 
@@ -240,7 +246,17 @@ var POP = {
                 }
                 if (hit) {
                     // spawn an exposion
-		         	POP.bubblesCaught += 1;
+		         	POP.bubblesCaught++;
+                    if (POP.entities[i].logo == logoStraight_index) {
+                        logoStraight_++;
+                        if (logoStraight_index >= logoStraight_MAX) {
+                            logoStraights++;
+                            logoStraight_count = 0;
+                        }
+                    } else {
+                        logoStraight_index = POP.entities[i].logo;
+                        logoStraight_count = 1;
+                    }
 /*
                     for (var n = 0; n < 5; n +=1 ) {
                         POP.entities.push(new POP.Particle(
@@ -284,12 +300,22 @@ var POP = {
 
     // this is where we draw all the entities
     render: function() {
+        function renderStats() {
+            // display scores
+            POP.Draw.text('BUBBLES: ' + POP.bubblesCaught + ' / ' + POP.bubblesThrown, 20, 40, 40, '#fff');
+            POP.Draw.text('LOGO STRAIGHTS: ' + logoStraights, 20, 80, 40, '#fff');
+            POP.Draw.text('DIFFICULTY: ' + Math.round(POP.complexity/POP.COMPLEXITY_MAX) , POP.WIDTH * 0.6, 40, 40, '#fff');
+        }
 
         var i;
 
         POP.Draw.rect(0, 0, POP.WIDTH, POP.HEIGHT, '#036');
+<<<<<<< HEAD
         POP.Draw.text('BUBBLES: ' + POP.bubblesCaught + ' / ' + POP.bubblesThrown, 20, 40, 40, '#fff');
         POP.Draw.text('DIFFICULTY: ' + Math.round(POP.complexity/POP.COMPLEXITY_MAX*10) , POP.WIDTH * 0.6, 40, 40, '#fff');
+=======
+        renderStats();
+>>>>>>> ef87a9237f525b51be4db0028b708802f2be6804
 
 
         // display snazzy wave effect
@@ -302,17 +328,11 @@ var POP = {
 //                       '#fff');
 //        }
 //
-            // cycle through all entities and render to canvas
-            for (i = POP.entities.length-1; i >= 0; i-- ) {
-                POP.entities[i].render();
+        // cycle through all entities and render to canvas
+        for (i = POP.entities.length-1; i >= 0; i-- ) {
+            POP.entities[i].render();
         }
-
-        // display scores
-/*
-        POP.Draw.text('thrown: ' + POP.bubblesThrown, 20, 30, 14, '#fff');
-        POP.Draw.text('popped: ' + POP.bubblesCaught, 20, 50, 14, '#fff');
-        POP.Draw.text('Complexity: ' + POP.complexity + '%', 20, 70, 14, '#fff');
-*/
+        renderStats();
 
 		if (POP.isIdle) {
 			var img = new Image();
@@ -383,8 +403,10 @@ LOGOS.push('img/yousician.png');
 LOGOS.push('img/JCDecaux.png');
 LOGOS.push('img/JCDecaux.png');
 
-var logoStright_count = 0;
+var logoStraight_count = 0;
 var logoStraight_index = 0;
+var logoStraight_MAX = 5;
+var logoStraights = 0;
 
 // abstracts various canvas operations into
 // standalone functions
