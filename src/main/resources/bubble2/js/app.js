@@ -16,8 +16,8 @@ window.requestAnimFrame = (function(){
 var POP = {
 
     // set up some inital values
-    WIDTH: 320,
-    HEIGHT:  480,
+    WIDTH: 1600,
+    HEIGHT:  900,
     scale:  1,
     // the position of the canvas
     // in relation to the screen
@@ -44,7 +44,7 @@ var POP = {
     ua:  null,
     android: null,
     ios:  null,
-	COMPLEXITY_MIN: 1,
+	COMPLEXITY_MIN: 0,
 	COMPLEXITY_MAX: 100,
 	COMPLEXITY_STEP: 5,
 	complexity: 70,
@@ -186,7 +186,7 @@ var POP = {
             POP.entities.push(new POP.Bubble());
 			POP.bubblesThrown +=1; 
             // reset the counter with a random value
-            POP.nextBubble = (POP.COMPLEXITY_MAX - POP.complexity)*2 + 1;
+            POP.nextBubble = (POP.COMPLEXITY_MAX - POP.complexity)*0.5 + 1;
 //            POP.nextBubble = 100;
 //            POP.nextBubble = ( Math.random() * 100 ) + 100;
         }
@@ -393,7 +393,7 @@ POP.Touch = function(x, y) {
     };
 
     this.render = function() {
-        POP.Draw.circle(this.x, this.y, this.r, 'rgba(255,0,0,'+this.opacity+')');
+//        POP.Draw.circle(this.x, this.y, this.r, 'rgba(255,0,0,'+this.opacity+')');
     };
 
 
@@ -403,8 +403,8 @@ POP.Touch = function(x, y) {
 POP.Bubble = function() {
 
     this.type = 'bubble';
-    this.r = (Math.random() * 20) + 10;
-    this.speed = (Math.random() * 3) + 1;
+    this.r = (Math.random() * 20) + 50;
+    this.speed = (Math.random() * 2) + 2;
 
     this.x = (Math.random() * (POP.WIDTH) - this.r);
     this.y = POP.HEIGHT + (Math.random() * 100) + 100;
