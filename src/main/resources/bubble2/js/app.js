@@ -228,8 +228,8 @@ var POP = {
                 hit = false;
                 for (var iTouch = 0; iTouch < touches.length; iTouch++) {
                     var touch = touches[iTouch];
-                    //if (POP.collides(POP.entities[i], {x: touch.x, y: touch.y, r: 7})) {
-                    if (POP.collides(touch, POP.entities[i])) {
+                    if (POP.collides(POP.entities[i], {x: touch.x, y: touch.y, r: 7})) {
+                    //if (POP.collides(touch, POP.entities[i])) {
                         touches.splice(iTouch,1);
                         hit = true;
                     }
@@ -353,6 +353,21 @@ POP.collides = function(a, b) {
 };
 
 
+var LOGOS = [];
+LOGOS.push('img/dr-oetker3.png');
+LOGOS.push('img/santa_claus_rovaniemi-b2.png');
+LOGOS.push('img/JCDecaux.png');
+LOGOS.push('img/santaclausland_Log_1102_5.png');
+LOGOS.push('img/santaclauslive_logo.png');
+LOGOS.push('img/twitter circle.png');
+LOGOS.push('img/upm.png');
+LOGOS.push('img/yousician.png');
+LOGOS.push('img/JCDecaux.png');
+LOGOS.push('img/JCDecaux.png');
+
+var logoStright_count = 0;
+var logoStraight_index = 0;
+
 // abstracts various canvas operations into
 // standalone functions
 POP.Draw = {
@@ -376,45 +391,18 @@ POP.Draw = {
     circle: function(x, y, r, col, logo) {
         POP.ctx.fillStyle = col;
         POP.ctx.beginPath();
-        POP.ctx.arc(x + 5, y + 5, r, 0,  Math.PI * 2, true);
+        POP.ctx.arc(x, y, r, 0,  Math.PI * 2, true);
         POP.ctx.closePath();
 //		POP.ctx.clip();
 //    	POP.ctx.drawImage(POP.img, x - r, y - r, x + r, y + r);
         POP.ctx.fill();
-        if (logo){
+        if (logo) {
             var image = new Image();
-            if (logo==1) {
-                image.src = 'img/dr-oetker3.png';
-            }
-            if (logo==2) {
-                image.src = 'img/santa_claus_rovaniemi-b2.png';
-            }
-            if (logo==3) {
-                image.src = 'img/JCDecaux.png';
-            }
-            if (logo==4) {
-                image.src = 'img/santaclausland_Log_1102_5.png';
-            }
-            if (logo==5) {
-                image.src = 'img/santaclauslive_logo.png';
-            }
-            if (logo==6) {
-                image.src = 'img/twitter circle.png';
-            }
-            if (logo==7) {
-                image.src = 'img/upm.png';
-            }
-            if (logo==8) {
-                image.src = 'img/yousician.png';
-            }
-            if (logo==9) {
-                image.src = 'img/JCDecaux.png';
-            }
-            if (logo==10) {
-                image.src = 'img/JCDecaux.png';
-            }}
-        POP.ctx.drawImage(image, x+5-r, y+5-r, r*2, r*2);
+            image.src = LOGOS[logo % LOGOS.length];
+        }
+        POP.ctx.drawImage(image, x-r, y-r, r*2, r*2);
 //		POP.ctx.restore();
+//        POP.ctx.clearRect(x, y, r, r);
     },
 
 
