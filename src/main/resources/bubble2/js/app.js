@@ -228,7 +228,6 @@ var POP = {
                     var touch = touches[iTouch];
                     if (POP.collides(POP.entities[i], {x: touch.x, y: touch.y, r: 7})) {
                         hit = true;
-                        break;
                     }
                 }
                 if (hit) {
