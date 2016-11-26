@@ -379,7 +379,7 @@ POP.Draw = {
 };
 
 
-var TOUCH_SCALE = 5;
+var TOUCH_SCALE = 8;
 
 POP.Input = {
 
@@ -393,7 +393,8 @@ POP.Input = {
           var touch = {};
           touch.x = (data[i].pageX - POP.offset.left) / POP.scale;
           touch.y = (data[i].pageY - POP.offset.top) / POP.scale;
-          touch.r = (Math.max(data[i].radiusX, data[i].radiusY) * 2) * TOUCH_SCALE;
+          //touch.r = (Math.max(data[i].radiusX, data[i].radiusY) * 2) * TOUCH_SCALE;
+          touch.r = TOUCH_SCALE;
           this.touches.push(touch);
         }
         //this.x = (data.pageX - POP.offset.left) / POP.scale;
