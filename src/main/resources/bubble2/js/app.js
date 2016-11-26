@@ -46,6 +46,7 @@ var POP = {
     ios:  null,
 	COMPLEXITY_MIN: 1,
 	COMPLEXITY_MAX: 100,
+	COMPLEXITY_STEP: 5,
 	complexity: 70,
 	// complexity of the gameplay. (1..100)
 	bubblesThrown: 0,
@@ -297,12 +298,12 @@ var POP = {
 
 	setComplexity: function() {
 		if (POP.bubblesCaught / POP.bubblesThrown < 0.5) {
-			if (POP.complexity > POP.COMPLEXITY_MIN) {			
-				POP.complexity -= 1;
+			if (POP.complexity > POP.COMPLEXITY_MIN + POP.COMPLEXITY_STEP) {			
+				POP.complexity -= POP.COMPLEXITY_STEP;
 			} 
 		} else {
-			if (POP.complexity < POP.COMPLEXITY_MAX) {			
-				POP.complexity += 1;
+			if (POP.complexity < POP.COMPLEXITY_MAX - POP.COMPLEXITY_STEP) {			
+				POP.complexity += POP.COMPLEXITY_STEP;
 			} 
 		}		
 	}
