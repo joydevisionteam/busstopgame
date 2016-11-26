@@ -44,6 +44,9 @@ var POP = {
     ua:  null,
     android: null,
     ios:  null,
+	COMPLEXITY_MIN: 1,
+	COMPLEXITY_MAX: 100,
+	complexity: 1,	// complexity of the gameplay. [1..100]
 
     init: function() {
 
@@ -168,7 +171,7 @@ var POP = {
             // put a new instance of bubble into our entities array
             POP.entities.push(new POP.Bubble());
             // reset the counter with a random value
-            POP.nextBubble = ( Math.random() * 100 ) + 100;
+            POP.nextBubble = (COMPLEXITY_MAX*COMPLEXITY_MAX - complexity*complexity) / 50;
         }
 
         // spawn a new instance of Touch
