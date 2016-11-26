@@ -46,7 +46,7 @@ var POP = {
     ios:  null,
 	COMPLEXITY_MIN: 1,
 	COMPLEXITY_MAX: 100,
-	complexity: 1,	// complexity of the gameplay. [1..100]
+	complexity: 100,	// complexity of the gameplay. [1..100]
 
     init: function() {
 
