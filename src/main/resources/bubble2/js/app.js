@@ -103,7 +103,9 @@ var POP = {
             e.preventDefault();
             // the event object has an array
             // called touches, we just want
-            // the first touch
+            // the first touchhttp://borismus.github.io/mobile-web-samples/browser-ninja/
+            console.log('TOUCHES:');
+            console.log(e.touches);
             POP.Input.set(e.touches[0]);
         }, false);
         window.addEventListener('touchmove', function(e) {
