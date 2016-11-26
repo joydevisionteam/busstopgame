@@ -484,6 +484,10 @@ POP.Bubble = function() {
     // the amount by which the bubble
     // will move from side to side
     this.waveSize = 5 + this.r;
+    this.wavePeriod = 0.1 + Math.random();
+    this.wavePhase =  Math.random() * 2;
+    this.YwaveSize =  Math.random() * 4;
+    this.YwavePeriod = 0.1 + Math.random();
     // we need to remember the original
     // x position for our sine wave calculation
     this.xConstant = this.x;
@@ -496,9 +500,9 @@ POP.Bubble = function() {
         // a sine wave is commonly a function of time
         var time = new Date().getTime() * 0.002;
 
-        this.y -= this.speed;
+        this.y -= this.speed + this.YwaveSize * Math.sin(this.YwavePeriod * time);
         // the x coord to follow a sine wave
-        this.x = this.waveSize * Math.sin(time) + this.xConstant;
+        this.x = this.waveSize * Math.sin(this.wavePeriod * time + this.wavePhase) + this.xConstant;
 
         // if offscreen flag for removal
         if (this.y < -10) {
