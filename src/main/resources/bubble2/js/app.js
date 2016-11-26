@@ -52,9 +52,11 @@ var POP = {
 	bubblesThrown: 0,
 	bubblesCaught: 0,
 	caughtTime: 0,
+	lastTouchTime: 0,
+	isIdle: true,
 	// percentage of caught bubbles (1..100)
 	alpha: 0.5,          /// current alpha
-    delta: 0.1,        /// delta value = speed
+    delta: 0.01,        /// delta value = speed
 	
 
     init: function() {
@@ -175,12 +177,16 @@ var POP = {
                                 // if the user tapped on this game tick
 
 		currentTime = new Date().getTime();
-		if ((currentTime - POP.caughtTime) > 15000) {
+		if ((currentTime - POP.caughtTime) > 5000) {
 			POP.setComplexity();
 			POP.bubblesThrown = 0;
 			POP.bubblesCaught = 0;
 			POP.caughtTime = currentTime;
-            POP.entities = [];
+    //        POP.entities = [];
+		}
+
+		if ((currentTime - POP.lastTouchTime) > 15000) {
+			POP.isIdle = true;
 		}
 
 
@@ -286,33 +292,6 @@ var POP = {
         POP.Draw.text('BUBBLES: ' + POP.bubblesCaught + ' / ' + POP.bubblesThrown, 20, 40, 40, '#fff');
         POP.Draw.text('DIFFICULTY: ' + Math.round(POP.complexity/POP.COMPLEXITY_MAX) , POP.WIDTH * 0.6, 40, 40, '#fff');
 
-		var img = new Image();
-		img.src = "https://hackjunction.com/wp-content/uploads/2016/10/logo_main.svg";
-//		POP.Draw.img(0,0,500,500,img);
-		
-		//// increase alpha with delta value
-        POP.alpha += POP.delta;
-        
-        //// if delta <=0 or >=1 then reverse
-        if (POP.alpha <= 0 || POP.alpha >= 1) POP.delta = -POP.delta;
-        
-        /// clear canvas
-   //     POP.ctx.clearRect(0, 0, POP.currentWidth, POP.currentHeight);
-        
-        /// set global alpha
-        POP.ctx.globalAlpha = POP.alpha;
-        
-        /// re-draw image
-		margin = POP.WIDTH/8;
-		side = POP.WIDTH-margin*2;
-        POP.ctx.drawImage(img, margin, (POP.HEIGHT - side)/2, side, side);
-        
-        /// loop using rAF
-        requestAnimationFrame(loop);
-
-
-
-
 
         // display snazzy wave effect
 //        for (i = 0; i < POP.wave.total; i++) {
@@ -336,6 +315,17 @@ var POP = {
         POP.Draw.text('Complexity: ' + POP.complexity + '%', 20, 70, 14, '#fff');
 */
 
+		if (POP.isIdle) {
+			var img = new Image();
+			img.src = "img/Tap-icon.png";		
+        	POP.alpha += POP.delta;
+        	if (POP.alpha <= 0.3 || POP.alpha >= 0.7) POP.delta = -POP.delta;
+        	POP.ctx.globalAlpha = POP.alpha;
+			margin = POP.WIDTH/8;
+			side = POP.WIDTH-margin*2;
+        	POP.ctx.drawImage(img, margin, (POP.HEIGHT - side)/2, side, side);
+        	POP.ctx.globalAlpha = 1;
+		};
     },
 
 
@@ -503,6 +493,9 @@ POP.Touch = function(x, y) {
         // if opacity if 0 or less, flag for removal
         this.remove = (this.opacity < 0) ? true : false;
     };
+
+	POP.isIdle = false;
+	POP.lastTouchTime = new Date().getTime();
 
     this.render = function() {
 //        POP.Draw.circle(this.x, this.y, this.r, 'rgba(255,0,0,'+this.opacity+')');
