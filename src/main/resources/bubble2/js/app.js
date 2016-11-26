@@ -176,11 +176,12 @@ var POP = {
                                 // if the user tapped on this game tick
 
 		currentTime = new Date().getTime();
-		if ((currentTime - POP.caughtTime) > 5000) {
+		if ((currentTime - POP.caughtTime) > 15000) {
 			POP.setComplexity();
 			POP.bubblesThrown = 0;
 			POP.bubblesCaught = 0;
 			POP.caughtTime = currentTime;
+            POP.entities = [];
 		}
 
 
@@ -201,6 +202,7 @@ var POP = {
         // if the user has tapped the screen
         var touches = [];
         if (POP.Input.tapped) {
+            POP.caughtTime = currentTime;
             while (POP.Input.touches.length > 0) {
                 var touch = POP.Input.touches.shift();
                 touches.push(touch);
@@ -222,7 +224,7 @@ var POP = {
         for (i = 0; i < POP.entities.length; i += 1) {
             POP.entities[i].update();
 
-            if (POP.entities[i].type === 'bubble' && checkCollision) {
+            if (touches.length > 0 && POP.entities[i].type === 'bubble' && checkCollision) {
                 hit = false;
                 for (var iTouch = 0; iTouch < touches.length; iTouch++) {
                     var touch = touches[iTouch];
