@@ -222,9 +222,9 @@ var POP = {
 
             if (POP.entities[i].type === 'bubble' && checkCollision) {
                 hit = false;
-                for (var i = 0; i < POP.Input.touches.length; i++) {
-                    var touch = POP.Input.touches[i];
-                    if (POP.collides(POP.entities[i], {x: touch.x, y: touch.y, r: 7})) {
+                for (var j = 0; j < POP.Input.touches.length; i++) {
+                    var touch = POP.Input.touches[j];
+                    if (POP.collides(POP.entities[j], {x: touch.x, y: touch.y, r: 7})) {
                         hit = true;
                         break;
                     }
