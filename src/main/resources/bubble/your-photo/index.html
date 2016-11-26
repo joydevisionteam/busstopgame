@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send your photo</title>
+    <script>
+        window.onload =
+                function () {
+                    $('#cameraInput').on('change', function (e) {
+                                $data = e.originalEvent.target.files[0];
+                                $reader = new FileReader();
+                                reader.onload = function (evt) {
+                                    $('#photo').attr('src', evt.target.result);
+                                    reader.readAsDaraUrl($data);
+                                };
+                            }
+                    );
+                }
+    </script>
+</head>
+<body>
+<input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput">
+<img id="photo"/>
+</body>
+</html>

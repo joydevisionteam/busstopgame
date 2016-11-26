@@ -107,8 +107,8 @@ var POP = {
             // the event object has an array
             // called touches, we just want
             // the first touchhttp://borismus.github.io/mobile-web-samples/browser-ninja/
-            console.log('TOUCHES:');
-            console.log(e.touches);
+            // console.log('TOUCHES:');
+            // console.log(e.touches);
             POP.Input.set(e.touches);
         }, false);
         window.addEventListener('touchmove', function(e) {
@@ -175,11 +175,12 @@ var POP = {
                                 // if the user tapped on this game tick
 
 		currentTime = new Date().getTime();
-		if ((currentTime - POP.caughtTime) > 5000) {
+		if ((currentTime - POP.caughtTime) > 15000) {
 			POP.setComplexity();
 			POP.bubblesThrown = 0;
 			POP.bubblesCaught = 0;
 			POP.caughtTime = currentTime;
+            POP.entities = [];
 		}
 
 
@@ -200,6 +201,7 @@ var POP = {
         // if the user has tapped the screen
         var touches = [];
         if (POP.Input.tapped) {
+            POP.caughtTime = currentTime;
             while (POP.Input.touches.length > 0) {
                 var touch = POP.Input.touches.shift();
                 touches.push(touch);
@@ -221,18 +223,20 @@ var POP = {
         for (i = 0; i < POP.entities.length; i += 1) {
             POP.entities[i].update();
 
-            if (POP.entities[i].type === 'bubble' && checkCollision) {
+            if (touches.length > 0 && POP.entities[i].type === 'bubble' && checkCollision) {
                 hit = false;
                 for (var iTouch = 0; iTouch < touches.length; iTouch++) {
                     var touch = touches[iTouch];
                     //if (POP.collides(POP.entities[i], {x: touch.x, y: touch.y, r: 7})) {
                     if (POP.collides(touch, POP.entities[i])) {
+                        touches.splice(iTouch,1);
                         hit = true;
                     }
                 }
                 if (hit) {
                     // spawn an exposion
 		         	POP.bubblesCaught += 1;
+/*
                     for (var n = 0; n < 5; n +=1 ) {
                         POP.entities.push(new POP.Particle(
                             POP.entities[i].x,
@@ -242,6 +246,7 @@ var POP = {
                             'rgba(255,255,255,'+Math.random()*1+')'
                         ));
                     }
+*/
                     POP.score.hit += 1;
                 }
 
@@ -278,6 +283,8 @@ var POP = {
         var i;
 
         POP.Draw.rect(0, 0, POP.WIDTH, POP.HEIGHT, '#036');
+        POP.Draw.text('BUBBLES: ' + POP.bubblesCaught + ' / ' + POP.bubblesThrown, 20, 40, 40, '#fff');
+        POP.Draw.text('DIFFICULTY: ' + Math.round(POP.complexity/POP.COMPLEXITY_MAX) , POP.WIDTH * 0.6, 40, 40, '#fff');
 
 		var img = new Image();
 		img.src = "https://hackjunction.com/wp-content/uploads/2016/10/logo_main.svg";
@@ -318,14 +325,16 @@ var POP = {
 //        }
 //
             // cycle through all entities and render to canvas
-            for (i = 0; i < POP.entities.length; i += 1) {
+            for (i = POP.entities.length-1; i >= 0; i-- ) {
                 POP.entities[i].render();
         }
 
         // display scores
+/*
         POP.Draw.text('thrown: ' + POP.bubblesThrown, 20, 30, 14, '#fff');
         POP.Draw.text('popped: ' + POP.bubblesCaught, 20, 50, 14, '#fff');
         POP.Draw.text('Complexity: ' + POP.complexity + '%', 20, 70, 14, '#fff');
+*/
 
     },
 
@@ -349,7 +358,7 @@ var POP = {
 				POP.complexity -= POP.COMPLEXITY_STEP;
 			} 
 		} else {
-			if (POP.complexity < POP.COMPLEXITY_MAX - POP.COMPLEXITY_STEP) {			
+			if (POP.complexity < POP.COMPLEXITY_MAX - POP.COMPLEXITY_STEP) {
 				POP.complexity += POP.COMPLEXITY_STEP;
 			} 
 		}		
@@ -397,7 +406,7 @@ POP.Draw = {
         POP.ctx.fillRect(x, y, w, h);
     },
 
-    circle: function(x, y, r, col) {
+    circle: function(x, y, r, col, logo) {
         POP.ctx.fillStyle = col;
         POP.ctx.beginPath();
         POP.ctx.arc(x + 5, y + 5, r, 0,  Math.PI * 2, true);
@@ -405,6 +414,39 @@ POP.Draw = {
 //		POP.ctx.clip();
 //    	POP.ctx.drawImage(POP.img, x - r, y - r, x + r, y + r);
         POP.ctx.fill();
+        if (logo){
+            var image = new Image();
+            if (logo==1) {
+                image.src = 'img/dr-oetker3.png';
+            }
+            if (logo==2) {
+                image.src = 'img/santa_claus_rovaniemi-b2.png';
+            }
+            if (logo==3) {
+                image.src = 'img/JCDecaux.png';
+            }
+            if (logo==4) {
+                image.src = 'img/santaclausland_Log_1102_5.png';
+            }
+            if (logo==5) {
+                image.src = 'img/santaclauslive_logo.png';
+            }
+            if (logo==6) {
+                image.src = 'img/twitter circle.png';
+            }
+            if (logo==7) {
+                image.src = 'img/upm.png';
+            }
+            if (logo==8) {
+                image.src = 'img/yousician.png';
+            }
+            if (logo==9) {
+                image.src = 'img/JCDecaux.png';
+            }
+            if (logo==10) {
+                image.src = 'img/JCDecaux.png';
+            }}
+        POP.ctx.drawImage(image, x+5-r, y+5-r, r*2, r*2);
 //		POP.ctx.restore();
     },
 
@@ -479,9 +521,15 @@ POP.Bubble = function() {
     this.x = (Math.random() * (POP.WIDTH) - this.r);
     this.y = POP.HEIGHT + (Math.random() * 100) + 100;
 
+    this.logo = Math.floor( Math.random() * ( 1 + 10 - 1 ) ) + 1;
+
     // the amount by which the bubble
     // will move from side to side
     this.waveSize = 5 + this.r;
+    this.wavePeriod = 0.1 + Math.random();
+    this.wavePhase =  Math.random() * 2;
+    this.YwaveSize =  Math.random() * 4;
+    this.YwavePeriod = 0.1 + Math.random();
     // we need to remember the original
     // x position for our sine wave calculation
     this.xConstant = this.x;
@@ -494,9 +542,9 @@ POP.Bubble = function() {
         // a sine wave is commonly a function of time
         var time = new Date().getTime() * 0.002;
 
-        this.y -= this.speed;
+        this.y -= this.speed + this.YwaveSize * Math.sin(this.YwavePeriod * time);
         // the x coord to follow a sine wave
-        this.x = this.waveSize * Math.sin(time) + this.xConstant;
+        this.x = this.waveSize * Math.sin(this.wavePeriod * time + this.wavePhase) + this.xConstant;
 
         // if offscreen flag for removal
         if (this.y < -10) {
@@ -508,7 +556,7 @@ POP.Bubble = function() {
 
     this.render = function() {
 
-        POP.Draw.circle(this.x, this.y, this.r, 'rgba(255,255,255,1)');
+        POP.Draw.circle(this.x, this.y, this.r, 'rgba(255,255,255,1)', this.logo);
     };
 
 };
