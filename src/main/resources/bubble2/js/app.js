@@ -52,7 +52,11 @@ var POP = {
 	bubblesThrown: 0,
 	bubblesCaught: 0,
 	caughtTime: 0,
+	lastTouchTime: 0,
+	isIdle: true,
 	// percentage of caught bubbles (1..100)
+	alpha: 0.5,          /// current alpha
+    delta: 0.01,        /// delta value = speed
 	
 
     init: function() {
@@ -121,9 +125,6 @@ var POP = {
             e.preventDefault();
         }, false);
 
-		POP.img = new Image("https://dl.dropboxusercontent.com/u/139992952/stackoverflow/sky-bg2.jpg");
-	//	img.src: "https://dl.dropboxusercontent.com/u/139992952/stackoverflow/sky-bg2.jpg";
-
         // we're ready to resize
         POP.resize();
 
@@ -188,6 +189,10 @@ var POP = {
 		currentTime = new Date().getTime();
 		if ((currentTime - POP.caughtTime) > 15000) {
             clearSlates();
+		}
+
+        if ((currentTime - POP.lastTouchTime) > 15000) {
+			POP.isIdle = true;
 		}
 
 
@@ -291,6 +296,9 @@ var POP = {
 
     },
 
+    
+
+
     // this is where we draw all the entities
     render: function() {
         function renderStats() {
@@ -304,6 +312,7 @@ var POP = {
 
         POP.Draw.rect(0, 0, POP.WIDTH, POP.HEIGHT, '#036');
         renderStats();
+
 
         // display snazzy wave effect
 //        for (i = 0; i < POP.wave.total; i++) {
@@ -321,6 +330,17 @@ var POP = {
         }
         renderStats();
 
+		if (POP.isIdle) {
+			var img = new Image();
+			img.src = "img/Tap-icon.png";		
+        	POP.alpha += POP.delta;
+        	if (POP.alpha <= 0.3 || POP.alpha >= 0.7) POP.delta = -POP.delta;
+        	POP.ctx.globalAlpha = POP.alpha;
+			margin = POP.WIDTH/8;
+			side = POP.WIDTH-margin*2;
+        	POP.ctx.drawImage(img, margin, (POP.HEIGHT - side)/2, side, side);
+        	POP.ctx.globalAlpha = 1;
+		};
     },
 
 
@@ -390,6 +410,10 @@ POP.Draw = {
 
     clear: function() {
         POP.ctx.clearRect(0, 0, POP.WIDTH, POP.HEIGHT);
+    },
+
+    img: function(x, y, w, h, img) {
+        POP.ctx.drawImage(img, x, y, x+w, y+h)
     },
 
 
@@ -474,6 +498,9 @@ POP.Touch = function(x, y) {
         // if opacity if 0 or less, flag for removal
         this.remove = (this.opacity < 0) ? true : false;
     };
+
+	POP.isIdle = false;
+	POP.lastTouchTime = new Date().getTime();
 
     this.render = function() {
 //        POP.Draw.circle(this.x, this.y, this.r, 'rgba(255,0,0,'+this.opacity+')');
