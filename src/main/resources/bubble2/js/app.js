@@ -354,7 +354,13 @@ POP.Draw = {
 
 
     rect: function(x, y, w, h, col) {
-        POP.ctx.fillStyle = col;
+		var grd = POP.ctx.createLinearGradient(0, 0, 0, h);
+		grd.addColorStop(1, "#001D47");
+		grd.addColorStop(0.5, "#005DE5");
+		grd.addColorStop(0.5, "#005DE5");
+		grd.addColorStop(0, "#89D7FF");
+		POP.ctx.fillStyle = grd;
+   //     POP.ctx.fillStyle = col;
         POP.ctx.fillRect(x, y, w, h);
     },
 
