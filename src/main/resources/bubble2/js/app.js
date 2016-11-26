@@ -53,6 +53,8 @@ var POP = {
 	bubblesCaught: 0,
 	caughtTime: 0,
 	// percentage of caught bubbles (1..100)
+	alpha: 0.5,          /// current alpha
+    delta: 0.1,        /// delta value = speed
 	
 
     init: function() {
@@ -120,9 +122,6 @@ var POP = {
             // as above
             e.preventDefault();
         }, false);
-
-		POP.img = new Image("https://dl.dropboxusercontent.com/u/139992952/stackoverflow/sky-bg2.jpg");
-	//	img.src: "https://dl.dropboxusercontent.com/u/139992952/stackoverflow/sky-bg2.jpg";
 
         // we're ready to resize
         POP.resize();
@@ -270,13 +269,43 @@ var POP = {
 
     },
 
+    
+
+
     // this is where we draw all the entities
     render: function() {
 
         var i;
 
-
         POP.Draw.rect(0, 0, POP.WIDTH, POP.HEIGHT, '#036');
+
+		var img = new Image();
+		img.src = "https://hackjunction.com/wp-content/uploads/2016/10/logo_main.svg";
+//		POP.Draw.img(0,0,500,500,img);
+		
+		//// increase alpha with delta value
+        POP.alpha += POP.delta;
+        
+        //// if delta <=0 or >=1 then reverse
+        if (POP.alpha <= 0 || POP.alpha >= 1) POP.delta = -POP.delta;
+        
+        /// clear canvas
+   //     POP.ctx.clearRect(0, 0, POP.currentWidth, POP.currentHeight);
+        
+        /// set global alpha
+        POP.ctx.globalAlpha = POP.alpha;
+        
+        /// re-draw image
+		margin = POP.WIDTH/8;
+		side = POP.WIDTH-margin*2;
+        POP.ctx.drawImage(img, margin, (POP.HEIGHT - side)/2, side, side);
+        
+        /// loop using rAF
+        requestAnimationFrame(loop);
+
+
+
+
 
         // display snazzy wave effect
 //        for (i = 0; i < POP.wave.total; i++) {
@@ -350,6 +379,10 @@ POP.Draw = {
 
     clear: function() {
         POP.ctx.clearRect(0, 0, POP.WIDTH, POP.HEIGHT);
+    },
+
+    img: function(x, y, w, h, img) {
+        POP.ctx.drawImage(img, x, y, x+w, y+h)
     },
 
 
