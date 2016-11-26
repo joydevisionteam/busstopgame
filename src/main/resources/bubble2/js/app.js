@@ -46,7 +46,12 @@ var POP = {
     ios:  null,
 	COMPLEXITY_MIN: 1,
 	COMPLEXITY_MAX: 100,
-	complexity: 100,	// complexity of the gameplay. [1..100]
+	complexity: 70,
+	// complexity of the gameplay. (1..100)
+	bubblesTrown: 0,
+	bubblesCaught: 0,
+	caughtTime: 0,
+	// percentage of caught bubbles (1..100)
 
     init: function() {
 
@@ -163,6 +168,14 @@ var POP = {
             checkCollision = false; // we only need to check for a collision
                                 // if the user tapped on this game tick
 
+		currentTime = new Date().getTime();
+		if ((currentTime - POP.caughtTime) > 5000) {
+			POP.setComplexity();
+			POP.bubblesThrown = 0;
+			POP.bubblesCaught = 0;
+			POP.caughtTime = currentTime;
+		}
+
 
         // decrease our nextBubble counter
         POP.nextBubble -= 1;
@@ -170,9 +183,11 @@ var POP = {
         if (POP.nextBubble < 0) {
             // put a new instance of bubble into our entities array
             POP.entities.push(new POP.Bubble());
+			POP.bubblesThrown +=1; 
             // reset the counter with a random value
-//            POP.nextBubble = (COMPLEXITY_MAX*COMPLEXITY_MAX - complexity*complexity) / 50;
-            POP.nextBubble = 1;
+            POP.nextBubble = (POP.COMPLEXITY_MAX - POP.complexity)*2 + 1;
+//            POP.nextBubble = 100;
+//            POP.nextBubble = ( Math.random() * 100 ) + 100;
         }
 
         // spawn a new instance of Touch
@@ -235,7 +250,6 @@ var POP = {
 
     },
 
-
     // this is where we draw all the entities
     render: function() {
 
@@ -262,7 +276,7 @@ var POP = {
         // display scores
         POP.Draw.text('Hit: ' + POP.score.hit, 20, 30, 14, '#fff');
         POP.Draw.text('Escaped: ' + POP.score.escaped, 20, 50, 14, '#fff');
-        POP.Draw.text('Accuracy: ' + POP.score.accuracy + '%', 20, 70, 14, '#fff');
+        POP.Draw.text('Complexity: ' + POP.complexity + '%', 20, 70, 14, '#fff');
 
     },
 
@@ -277,7 +291,20 @@ var POP = {
 
         POP.update();
         POP.render();
-    }
+    },
+
+
+	setComplexity: function() {
+		if (POP.bubblesThrown / POP.bubblesCaught > 0.5) {
+			if (POP.complexity < POP.COMPLEXITY_MAX) {			
+				POP.complexity += 1;
+			} 
+		} else {
+			if (POP.complexity > POP.COMPLEXITY_MIN) {			
+				POP.complexity -= 1;
+			} 
+		}		
+	}
 
 
 };
