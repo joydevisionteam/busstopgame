@@ -105,8 +105,8 @@ var POP = {
             // the event object has an array
             // called touches, we just want
             // the first touchhttp://borismus.github.io/mobile-web-samples/browser-ninja/
-            console.log('TOUCHES:');
-            console.log(e.touches);
+            // console.log('TOUCHES:');
+            // console.log(e.touches);
             POP.Input.set(e.touches);
         }, false);
         window.addEventListener('touchmove', function(e) {
@@ -228,12 +228,14 @@ var POP = {
                     var touch = touches[iTouch];
                     //if (POP.collides(POP.entities[i], {x: touch.x, y: touch.y, r: 7})) {
                     if (POP.collides(touch, POP.entities[i])) {
+                        touches.splice(iTouch,1);
                         hit = true;
                     }
                 }
                 if (hit) {
                     // spawn an exposion
 		         	POP.bubblesCaught += 1;
+/*
                     for (var n = 0; n < 5; n +=1 ) {
                         POP.entities.push(new POP.Particle(
                             POP.entities[i].x,
@@ -243,6 +245,7 @@ var POP = {
                             'rgba(255,255,255,'+Math.random()*1+')'
                         ));
                     }
+*/
                     POP.score.hit += 1;
                 }
 
@@ -277,6 +280,8 @@ var POP = {
 
 
         POP.Draw.rect(0, 0, POP.WIDTH, POP.HEIGHT, '#036');
+        POP.Draw.text('BUBBLES: ' + POP.bubblesCaught + ' / ' + POP.bubblesThrown, 20, 40, 40, '#fff');
+        POP.Draw.text('DIFFICULTY: ' + Math.round(POP.complexity/POP.COMPLEXITY_MAX) , POP.WIDTH * 0.6, 40, 40, '#fff');
 
         // display snazzy wave effect
 //        for (i = 0; i < POP.wave.total; i++) {
@@ -289,14 +294,16 @@ var POP = {
 //        }
 //
             // cycle through all entities and render to canvas
-            for (i = 0; i < POP.entities.length; i += 1) {
+            for (i = POP.entities.length-1; i >= 0; i-- ) {
                 POP.entities[i].render();
         }
 
         // display scores
+/*
         POP.Draw.text('thrown: ' + POP.bubblesThrown, 20, 30, 14, '#fff');
         POP.Draw.text('popped: ' + POP.bubblesCaught, 20, 50, 14, '#fff');
         POP.Draw.text('Complexity: ' + POP.complexity + '%', 20, 70, 14, '#fff');
+*/
 
     },
 
@@ -320,7 +327,7 @@ var POP = {
 				POP.complexity -= POP.COMPLEXITY_STEP;
 			} 
 		} else {
-			if (POP.complexity < POP.COMPLEXITY_MAX - POP.COMPLEXITY_STEP) {			
+			if (POP.complexity < POP.COMPLEXITY_MAX - POP.COMPLEXITY_STEP) {
 				POP.complexity += POP.COMPLEXITY_STEP;
 			} 
 		}		
