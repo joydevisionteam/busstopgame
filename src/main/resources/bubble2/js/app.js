@@ -96,7 +96,7 @@ var POP = {
         // listen for clicks
         window.addEventListener('click', function(e) {
             e.preventDefault();
-            POP.Input.set(e);
+            POP.Input.set([e]);
         }, false);
 
         // listen for touches
@@ -107,7 +107,7 @@ var POP = {
             // the first touchhttp://borismus.github.io/mobile-web-samples/browser-ninja/
             console.log('TOUCHES:');
             console.log(e.touches);
-            POP.Input.set(e.touches[0]);
+            POP.Input.set(e.touches);
         }, false);
         window.addEventListener('touchmove', function(e) {
             // we're not interested in this
@@ -200,15 +200,19 @@ var POP = {
         // spawn a new instance of Touch
         // if the user has tapped the screen
         if (POP.Input.tapped) {
-            // keep track of taps; needed to
-            // calculate accuracy
-            POP.score.taps += 1;
-		    // add a new touch
-            POP.entities.push(new POP.Touch(POP.Input.x, POP.Input.y));
-            // set tapped back to false
-            // to avoid spawning a new touch
-            // in the next cycle
+            while (POP.input.touches.length > 0) {
+                var touch = POP.input.touches.shift();
+                // keep track of taps; needed to
+                // calculate accuracy
+                POP.score.taps += 1;
+                // add a new touch
+                POP.entities.push(new POP.Touch(touch.x, touch.y));
+                // set tapped back to false
+                // to avoid spawning a new touch
+                // in the next cycle
+            }
             POP.Input.tapped = false;
+
             checkCollision = true;
         }
 
@@ -373,10 +377,17 @@ POP.Input = {
     x: 0,
     y: 0,
     tapped :false,
+    touches: [],
 
     set: function(data) {
-        this.x = (data.pageX - POP.offset.left) / POP.scale;
-        this.y = (data.pageY - POP.offset.top) / POP.scale;
+        for (i = 0; i < data.length; i += 1) {
+          var touch = {};
+          touch.x = (data[i].pageX - POP.offset.left) / POP.scale;
+          touch.y = (data[i].pageY - POP.offset.top) / POP.scale;
+          this.touches.push(touch);
+        }
+        //this.x = (data.pageX - POP.offset.left) / POP.scale;
+        //this.y = (data.pageY - POP.offset.top) / POP.scale;
         this.tapped = true;
 
     }
