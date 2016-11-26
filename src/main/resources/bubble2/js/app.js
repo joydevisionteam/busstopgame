@@ -196,7 +196,7 @@ var POP = {
         // spawn a new instance of Touch
         // if the user has tapped the screen
         if (POP.Input.tapped) {
-            while (POP.input.touches.length > 0) {
+            while (POP.Input.touches.length > 0) {
                 var touch = POP.input.touches.shift();
                 // keep track of taps; needed to
                 // calculate accuracy
