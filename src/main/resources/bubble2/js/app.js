@@ -173,10 +173,6 @@ var POP = {
     // and checked for collisions etc
     update: function() {
         function clearSlates() {
-            POP.setComplexity();
-            POP.bubblesThrown = 0;
-            POP.bubblesCaught = 0;
-            POP.caughtTime = currentTime;
         //    POP.entities = [];  // wrong behaviour - it breaks up bubbles flow, clears all bubbles from screen
             logoStraight_index = 0;
             logoStraight_count = 0;
@@ -188,10 +184,14 @@ var POP = {
 
 		currentTime = new Date().getTime();
 		if ((currentTime - POP.caughtTime) > 5000) {
-            clearSlates();
+            POP.setComplexity();
+            POP.bubblesThrown = 0;
+            POP.bubblesCaught = 0;
+            POP.caughtTime = currentTime;
 		}
 
         if ((currentTime - POP.lastTouchTime) > 15000) {
+            clearSlates();
 			POP.isIdle = true;
 		}
 
@@ -232,24 +232,24 @@ var POP = {
 
         // cycle through all entities and update as necessary
         for (i = 0; i < POP.entities.length; i += 1) {
-            POP.entities[i].update();
 
             if (touches.length > 0 && POP.entities[i].type === 'bubble' && checkCollision) {
-                hit = false;
+                var hit = false;
                 for (var iTouch = 0; iTouch < touches.length; iTouch++) {
                     var touch = touches[iTouch];
                     if (POP.collides(POP.entities[i], {x: touch.x, y: touch.y, r: 7})) {
                     //if (POP.collides(touch, POP.entities[i])) {
                         touches.splice(iTouch,1);
                         hit = true;
+                        break;
                     }
                 }
                 if (hit) {
                     // spawn an exposion
 		         	POP.bubblesCaught++;
                     if (POP.entities[i].logo == logoStraight_index) {
-                        logoStraight_++;
-                        if (logoStraight_index >= logoStraight_MAX) {
+                        logoStraight_count++;
+                        if (logoStraight_count >= logoStraight_MAX) {
                             logoStraights++;
                             logoStraight_count = 0;
                         }
@@ -278,6 +278,8 @@ var POP = {
             // flag is set to true
             if (POP.entities[i].remove) {
                 POP.entities.splice(i, 1);
+            } else {
+                POP.entities[i].update();
             }
         }
 
@@ -303,13 +305,14 @@ var POP = {
         function renderStats() {
             // display scores
             POP.Draw.text('BUBBLES: ' + POP.bubblesCaught + ' / ' + POP.bubblesThrown, 20, 40, 40, '#fff');
-            POP.Draw.text('LOGO STRAIGHTS: ' + logoStraights, 20, 80, 40, '#fff');
+            POP.Draw.text('LOGO STRAIGHTS: ' + logoStraights + ' (' + logoStraight_count + ')', 20, 80, 40, '#fff');
             POP.Draw.text('DIFFICULTY: ' + Math.round(POP.complexity/POP.COMPLEXITY_MAX*10) , POP.WIDTH * 0.6, 40, 40, '#fff');
         }
 
         var i;
 
         POP.Draw.rect(0, 0, POP.WIDTH, POP.HEIGHT, '#036');
+        renderStats();
 
 
         // display snazzy wave effect
